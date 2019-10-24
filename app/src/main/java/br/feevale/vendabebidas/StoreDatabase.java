@@ -10,14 +10,14 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VendasDatabase {
+public class StoreDatabase {
     private Context ctx;
     public static final String DATABASE_NAME = "vendasbebidas.db";
     public static final Integer DATABASE_VERSION = 1;
     private SQLiteDatabase db;
     private VendasDatabaseHelper dbHelper;
 
-    public VendasDatabase(Context ctx){
+    public StoreDatabase(Context ctx){
         this.ctx = ctx;
         dbHelper = new VendasDatabaseHelper();
         db = dbHelper.getWritableDatabase();

@@ -2,13 +2,12 @@ package br.feevale.vendabebidas;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
 import br.feevale.databasesqlite.R;
 
 public class CustomerActivity extends AppCompatActivity {
-    VendasDatabase db;
+    StoreDatabase db;
     Customer lastCustomer;
     ListView listCustomers;
     CustomerListAdapter customerAdapter;
@@ -20,7 +19,7 @@ public class CustomerActivity extends AppCompatActivity {
 
         listCustomers = (ListView) findViewById(R.id.listCustomers);
 
-        db = new VendasDatabase(this);
+        db = new StoreDatabase(this);
         customerAdapter = new CustomerListAdapter(getBaseContext(), db);
         listCustomers.setAdapter(customerAdapter);
     }

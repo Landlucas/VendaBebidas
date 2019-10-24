@@ -10,11 +10,11 @@ import android.widget.TextView;
 import br.feevale.databasesqlite.R;
 
 public class CustomerListAdapter extends BaseAdapter {
-    VendasDatabase db;
+    StoreDatabase db;
     Context ctx;
     LayoutInflater inflater;
 
-    public CustomerListAdapter(Context ctx, VendasDatabase db){
+    public CustomerListAdapter(Context ctx, StoreDatabase db){
         inflater = LayoutInflater.from(ctx);
         this.db = db;
     }

@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import br.feevale.databasesqlite.R;
 
-public class VendasMainActivity extends AppCompatActivity {
+public class StoreMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

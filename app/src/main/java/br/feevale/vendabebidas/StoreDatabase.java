@@ -133,6 +133,21 @@ public class StoreDatabase {
         return customers;
     }
 
+    public int updateCustomer(Customer c){
+        ContentValues values = new ContentValues();
+        values.put(CustomerTable.COLUMN_NAME, c.getName());
+        values.put(CustomerTable.COLUMN_EMAIL, c.getEmail());
+        values.put(CustomerTable.COLUMN_ADDRESS, c.getAddress());
+        String args[] = {c.getId().toString()};
+
+        return db.update(CustomerTable.TABLE_NAME, values, CustomerTable._ID + "=?", args);
+    }
+
+    public void removeCustomer(Customer c){
+        String args[] = {c.getId().toString()};
+        db.delete(CustomerTable.TABLE_NAME, CustomerTable._ID + "=?", args);
+    }
+
     private class VendasDatabaseHelper extends SQLiteOpenHelper{
 
         VendasDatabaseHelper(){

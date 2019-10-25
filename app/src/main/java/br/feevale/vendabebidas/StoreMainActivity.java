@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import br.feevale.databasesqlite.R;
+import br.feevale.vendabebidas.R;
 
 public class StoreMainActivity extends AppCompatActivity {
 
@@ -30,6 +30,10 @@ public class StoreMainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.customers){
             Intent intent = new Intent(this, CustomerActivity.class);
+            startActivity(intent);
+        }
+        if(item.getItemId() == R.id.drinks){
+            Intent intent = new Intent(this, DrinkActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

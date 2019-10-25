@@ -13,7 +13,7 @@ import java.util.List;
 public class StoreDatabase {
     private Context ctx;
     public static final String DATABASE_NAME = "vendasbebidas.db";
-    public static final Integer DATABASE_VERSION = 1;
+    public static final Integer DATABASE_VERSION = 2;
     private SQLiteDatabase db;
     private VendasDatabaseHelper dbHelper;
 
@@ -52,7 +52,7 @@ public class StoreDatabase {
                     COLUMN_NAME          + " TEXT, " +
                     COLUMN_VOLUME        + " INTEGER, " +
                     COLUMN_ISALCOHOLIC   + " INTEGER, " +
-                    COLUMN_PRICE         + " TEXT)";
+                    COLUMN_PRICE         + " REAL)";
             return sql;
         }
     }
@@ -110,7 +110,7 @@ public class StoreDatabase {
         drink.setName(cursor.getString(cursor.getColumnIndex(DrinkTable.COLUMN_NAME)));
         drink.setVolume(cursor.getInt(cursor.getColumnIndex(DrinkTable.COLUMN_VOLUME)));
         drink.setAlcoholic(cursor.getInt(cursor.getColumnIndex(DrinkTable.COLUMN_ISALCOHOLIC)));
-        drink.setPrice(cursor.getLong(cursor.getColumnIndex(DrinkTable.COLUMN_PRICE)));
+        drink.setPrice(cursor.getDouble(cursor.getColumnIndex(DrinkTable.COLUMN_PRICE)));
 
         return drink;
     }
@@ -133,6 +133,25 @@ public class StoreDatabase {
         return customers;
     }
 
+    public List<Drink> getDrinks(){
+        String cols[] = {DrinkTable._ID, DrinkTable.COLUMN_NAME, DrinkTable.COLUMN_VOLUME, DrinkTable.COLUMN_ISALCOHOLIC, DrinkTable.COLUMN_PRICE};
+        Cursor cursor = db.query(DrinkTable.TABLE_NAME, cols, null, null, null, null, DrinkTable._ID);
+        List<Drink> drinks = new ArrayList<>();
+        Drink drink;
+
+        while(cursor.moveToNext()){
+            drink = new Drink();
+            drink.setId(cursor.getLong(cursor.getColumnIndex(DrinkTable._ID)));
+            drink.setName(cursor.getString(cursor.getColumnIndex(DrinkTable.COLUMN_NAME)));
+            drink.setVolume(cursor.getInt(cursor.getColumnIndex(DrinkTable.COLUMN_VOLUME)));
+            drink.setAlcoholic(cursor.getInt(cursor.getColumnIndex(DrinkTable.COLUMN_ISALCOHOLIC)));
+            drink.setPrice(cursor.getDouble(cursor.getColumnIndex(DrinkTable.COLUMN_PRICE)));
+            drinks.add(drink);
+        }
+
+        return drinks;
+    }
+
     public int updateCustomer(Customer c){
         ContentValues values = new ContentValues();
         values.put(CustomerTable.COLUMN_NAME, c.getName());
@@ -143,9 +162,25 @@ public class StoreDatabase {
         return db.update(CustomerTable.TABLE_NAME, values, CustomerTable._ID + "=?", args);
     }
 
+    public int updateDrink(Drink d){
+        ContentValues values = new ContentValues();
+        values.put(DrinkTable.COLUMN_NAME, d.getName());
+        values.put(DrinkTable.COLUMN_VOLUME, d.getVolume());
+        values.put(DrinkTable.COLUMN_ISALCOHOLIC, d.getAlcoholic());
+        values.put(DrinkTable.COLUMN_PRICE, d.getPrice());
+        String args[] = {d.getId().toString()};
+
+        return db.update(DrinkTable.TABLE_NAME, values, DrinkTable._ID + "=?", args);
+    }
+
     public void removeCustomer(Customer c){
         String args[] = {c.getId().toString()};
         db.delete(CustomerTable.TABLE_NAME, CustomerTable._ID + "=?", args);
+    }
+
+    public void removeDrink(Drink d){
+        String args[] = {d.getId().toString()};
+        db.delete(DrinkTable.TABLE_NAME, DrinkTable._ID + "=?", args);
     }
 
     private class VendasDatabaseHelper extends SQLiteOpenHelper{

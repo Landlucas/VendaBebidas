@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">Venda de Bebidas</string>
     <string name="customers">Clientes</string>
+    <string name="drinks">Bebidas</string>
+    <string name="currency_prefix">R$</string>
+    <string name="name">Nome</string>
+    <string name="email">E-mail</string>
+    <string name="address">Endereço</string>
+    <string name="add_customer">Adicionar Cliente</string>
+    <string name="edit_customer">Editar Cliente</string>
+    <string name="remove_customer">Remover Cliente</string>
+    <string name="volume">Volume</string>
+    <string name="isAlcoholic">É alcoólico?</string>
+    <string name="price">Preço</string>
+    <string name="add_drink">Adicionar Bebida</string>
+    <string name="edit_drink">Editar Bebida</string>
+    <string name="remove_drink">Remover Bebida</string>
+    <string name="alcoholic_drink">Bebida alcoólica</string>
+    <string name="not_alcoholic_drink">Não é Bebida alcoólica</string>
 </resources>

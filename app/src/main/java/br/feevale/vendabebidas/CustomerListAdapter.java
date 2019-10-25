@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import br.feevale.databasesqlite.R;
+import br.feevale.vendabebidas.R;
 
 public class CustomerListAdapter extends BaseAdapter {
     StoreDatabase db;

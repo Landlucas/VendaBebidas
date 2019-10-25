@@ -1,5 +1,6 @@
 package br.feevale.vendabebidas;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import br.feevale.databasesqlite.R;
+import br.feevale.vendabebidas.R;
 
 public class CustomerActivity extends AppCompatActivity {
     StoreDatabase db;
@@ -29,6 +30,7 @@ public class CustomerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listCustomers   = (ListView) findViewById(R.id.listCustomers);
         newName         = (EditText) findViewById(R.id.name);
@@ -70,7 +72,7 @@ public class CustomerActivity extends AppCompatActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_customers, menu);
+        inflater.inflate(R.menu.menu_crud, menu);
     }
 
     @Override
@@ -102,5 +104,18 @@ public class CustomerActivity extends AppCompatActivity {
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(CustomerActivity.this, StoreMainActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

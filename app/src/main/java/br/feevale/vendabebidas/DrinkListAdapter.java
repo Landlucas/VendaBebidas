@@ -51,7 +51,7 @@ public class DrinkListAdapter extends BaseAdapter {
         } else if(d.getAlcoholic() == 0) {
             isAlcoholic.setText(ctx.getResources().getString(R.string.not_alcoholic_drink));
         }
-        DecimalFormat formater = new DecimalFormat("#.##");
+        DecimalFormat formater = new DecimalFormat("#.00");
         price.setText(ctx.getResources().getString(R.string.currency_prefix) + formater.format(d.getPrice()));
 
         return v;

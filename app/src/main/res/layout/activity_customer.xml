@@ -11,11 +11,15 @@
         android:id="@+id/listCustomers"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/name"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorListViewBackground"
+        android:divider="@android:color/transparent"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:dividerHeight="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,13 +31,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/name"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/address"
         app:layout_constraintEnd_toStartOf="@+id/email"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/email" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/email"
@@ -41,41 +46,38 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/listCustomers" />
+        app:layout_constraintStart_toEndOf="@+id/name" />
 
     <EditText
         android:id="@+id/address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/address"
         android:inputType="textPostalAddress"
         app:layout_constraintBottom_toTopOf="@+id/buttonAdd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonAdd"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:onClick="buttonAddClick"
         android:text="@string/add_customer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

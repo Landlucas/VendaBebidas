@@ -7,14 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import br.feevale.vendabebidas.R;
-
 public class CustomerListAdapter extends BaseAdapter {
-    StoreDatabase db;
+    StoreDatabaseHelper db;
     Context ctx;
     LayoutInflater inflater;
 
-    public CustomerListAdapter(Context ctx, StoreDatabase db){
+    public CustomerListAdapter(Context ctx, StoreDatabaseHelper db){
         inflater = LayoutInflater.from(ctx);
         this.db = db;
     }

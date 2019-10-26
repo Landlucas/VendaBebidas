@@ -6,18 +6,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoreDatabase {
+public class StoreDatabaseHelper {
     private Context ctx;
     public static final String DATABASE_NAME = "vendasbebidas.db";
-    public static final Integer DATABASE_VERSION = 2;
+    public static final Integer DATABASE_VERSION = 10;
     private SQLiteDatabase db;
     private VendasDatabaseHelper dbHelper;
 
-    public StoreDatabase(Context ctx){
+    public StoreDatabaseHelper(Context ctx){
         this.ctx = ctx;
         dbHelper = new VendasDatabaseHelper();
         db = dbHelper.getWritableDatabase();
@@ -57,6 +60,39 @@ public class StoreDatabase {
         }
     }
 
+    public static class OrderTable implements BaseColumns{
+        public static final String TABLE_NAME = "orders";
+        public static final String COLUMN_CUSTOMER = "customer";
+        public static final String COLUMN_TOTAL = "total";
+
+        public static String getSQL(){
+            String sql = "CREATE TABLE " + TABLE_NAME + " (" +
+                    _ID                  + " INTEGER PRIMARY KEY, " +
+                    COLUMN_CUSTOMER      + " INTEGER, " +
+                    COLUMN_TOTAL         + " REAL, " +
+                    "FOREIGN KEY(" + COLUMN_CUSTOMER + ") REFERENCES " + CustomerTable.TABLE_NAME + "(" + CustomerTable._ID + "))";
+            return sql;
+        }
+    }
+
+    public static class OrderItemTable implements BaseColumns{
+        public static final String TABLE_NAME = "orderitems";
+        public static final String COLUMN_DRINK = "drink";
+        public static final String COLUMN_QTY = "qty";
+        public static final String COLUMN_ORDER = "order_id";
+
+        public static String getSQL(){
+            String sql = "CREATE TABLE " + TABLE_NAME + " (" +
+                    _ID                  + " INTEGER PRIMARY KEY, " +
+                    COLUMN_DRINK         + " INTEGER, " +
+                    COLUMN_QTY           + " INTEGER, " +
+                    COLUMN_ORDER         + " INTEGER, " +
+                    "FOREIGN KEY(" + COLUMN_DRINK + ") REFERENCES " + DrinkTable.TABLE_NAME + "(" + DrinkTable._ID + ")" +
+                    "FOREIGN KEY(" + COLUMN_ORDER + ") REFERENCES " + OrderTable.TABLE_NAME + "(" + OrderTable._ID + "))";
+            return sql;
+        }
+    }
+
     public Long addCustomer(Customer c){
         ContentValues values = new ContentValues();
         values.put(CustomerTable.COLUMN_NAME, c.getName());
@@ -66,14 +102,31 @@ public class StoreDatabase {
         return db.insert(CustomerTable.TABLE_NAME, null, values);
     }
 
-    public Long addDrink(Drink s){
+    public Long addDrink(Drink d){
         ContentValues values = new ContentValues();
-        values.put(DrinkTable.COLUMN_NAME, s.getName());
-        values.put(DrinkTable.COLUMN_VOLUME, s.getVolume());
-        values.put(DrinkTable.COLUMN_ISALCOHOLIC, s.getAlcoholic());
-        values.put(DrinkTable.COLUMN_PRICE, s.getPrice());
+        values.put(DrinkTable.COLUMN_NAME, d.getName());
+        values.put(DrinkTable.COLUMN_VOLUME, d.getVolume());
+        values.put(DrinkTable.COLUMN_ISALCOHOLIC, d.getAlcoholic());
+        values.put(DrinkTable.COLUMN_PRICE, d.getPrice());
 
         return db.insert(DrinkTable.TABLE_NAME, null, values);
+    }
+
+    public Long addOrder(Order o){
+        ContentValues values = new ContentValues();
+        values.put(OrderTable.COLUMN_CUSTOMER, o.getCustomer().getId());
+        values.put(OrderTable.COLUMN_TOTAL, o.getTotal());
+
+        return db.insert(OrderTable.TABLE_NAME, null, values);
+    }
+
+    public Long addOrderItem(OrderItem o){
+        ContentValues values = new ContentValues();
+        values.put(OrderItemTable.COLUMN_DRINK, o.getDrink().getId());
+        values.put(OrderItemTable.COLUMN_QTY, o.getQty());
+        values.put(OrderItemTable.COLUMN_ORDER, o.getOrder().getId());
+
+        return db.insert(OrderItemTable.TABLE_NAME, null, values);
     }
 
     public Customer getCustomer(Long id){
@@ -81,11 +134,11 @@ public class StoreDatabase {
         String args[] = {id.toString()};
         Cursor cursor = db.query(CustomerTable.TABLE_NAME, cols, CustomerTable._ID+"=?", args, null, null, CustomerTable._ID);
 
-        if(cursor.getCount() != 0){
+        if(cursor.getCount() == 0){
             return null;
         }
 
-        cursor.moveToNext();
+        cursor.moveToFirst();
         Customer customer = new Customer();
         customer.setId(cursor.getLong(cursor.getColumnIndex(CustomerTable._ID)));
         customer.setName(cursor.getString(cursor.getColumnIndex(CustomerTable.COLUMN_NAME)));
@@ -152,6 +205,24 @@ public class StoreDatabase {
         return drinks;
     }
 
+    public List<Order> getOrders(){
+        String cols[] = {OrderTable._ID, OrderTable.COLUMN_CUSTOMER, OrderTable.COLUMN_TOTAL};
+        Cursor cursor = db.query(OrderTable.TABLE_NAME, cols, null, null, null, null, OrderTable._ID);
+        List<Order> orders = new ArrayList<>();
+        Order order;
+
+        while(cursor.moveToNext()){
+            order = new Order();
+            order.setId(cursor.getLong(cursor.getColumnIndex(OrderTable._ID)));
+            Long customerId = Long.parseLong(cursor.getString(cursor.getColumnIndex(OrderTable.COLUMN_CUSTOMER)));
+            order.setCustomer(getCustomer(customerId));
+            order.setTotal(cursor.getDouble(cursor.getColumnIndex(OrderTable.COLUMN_TOTAL)));
+            orders.add(order);
+        }
+
+        return orders;
+    }
+
     public int updateCustomer(Customer c){
         ContentValues values = new ContentValues();
         values.put(CustomerTable.COLUMN_NAME, c.getName());
@@ -183,6 +254,12 @@ public class StoreDatabase {
         db.delete(DrinkTable.TABLE_NAME, DrinkTable._ID + "=?", args);
     }
 
+    public void removeOrder(Drink d){
+        String args[] = {d.getId().toString()};
+        db.delete(OrderTable.TABLE_NAME, OrderTable._ID + "=?", args);
+        db.delete(OrderItemTable.TABLE_NAME, OrderItemTable.COLUMN_ORDER + "=?", args);
+    }
+
     private class VendasDatabaseHelper extends SQLiteOpenHelper{
 
         VendasDatabaseHelper(){
@@ -192,12 +269,16 @@ public class StoreDatabase {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(DrinkTable.getSQL());
             db.execSQL(CustomerTable.getSQL());
+            db.execSQL(OrderTable.getSQL());
+            db.execSQL(OrderItemTable.getSQL());
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + DrinkTable.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + CustomerTable.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OrderTable.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OrderItemTable.TABLE_NAME);
             onCreate(db);
         }
 

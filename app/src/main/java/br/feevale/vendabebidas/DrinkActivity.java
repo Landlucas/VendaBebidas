@@ -18,10 +18,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import br.feevale.vendabebidas.R;
-
 public class DrinkActivity extends AppCompatActivity {
-    StoreDatabase db;
+    StoreDatabaseHelper db;
     Drink lastDrink;
     ListView listDrinks;
     DrinkListAdapter drinkAdapter;
@@ -44,7 +42,7 @@ public class DrinkActivity extends AppCompatActivity {
         newPrice        = (EditText) findViewById(R.id.price);
         buttonAdd       = (Button) findViewById(R.id.buttonAdd);
 
-        db = new StoreDatabase(this);
+        db = new StoreDatabaseHelper(this);
         drinkAdapter = new DrinkListAdapter(getBaseContext(), db);
         listDrinks.setAdapter(drinkAdapter);
 
@@ -56,7 +54,6 @@ public class DrinkActivity extends AppCompatActivity {
         newIsAlcoholic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("ITEM","SEL " + i + " " + l);
                 if(i > 0) {
                     newIsAlchoholicNumber = i--;
                 }

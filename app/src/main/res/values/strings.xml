@@ -17,4 +17,11 @@
     <string name="remove_drink">Remover Bebida</string>
     <string name="alcoholic_drink">Bebida alcoólica</string>
     <string name="not_alcoholic_drink">Não é Bebida alcoólica</string>
+    <string name="add_order">Adicionar Venda</string>
+    <string name="start_order">Iniciar Venda</string>
+    <string name="edit_order">Editar Venda</string>
+    <string name="remove_order">Remover Venda</string>
+    <string name="add_order_item">Adicionar Item de Venda</string>
+    <string name="edit_order_item">Editar Item de Venda</string>
+    <string name="remove_order_item">Remover Item de Venda</string>
 </resources>

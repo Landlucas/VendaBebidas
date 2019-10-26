@@ -15,10 +15,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import br.feevale.vendabebidas.R;
-
 public class CustomerActivity extends AppCompatActivity {
-    StoreDatabase db;
+    StoreDatabaseHelper db;
     Customer lastCustomer;
     ListView listCustomers;
     CustomerListAdapter customerAdapter;
@@ -38,7 +36,7 @@ public class CustomerActivity extends AppCompatActivity {
         newAddress      = (EditText) findViewById(R.id.address);
         buttonAdd       = (Button) findViewById(R.id.buttonAdd);
 
-        db = new StoreDatabase(this);
+        db = new StoreDatabaseHelper(this);
         customerAdapter = new CustomerListAdapter(getBaseContext(), db);
         listCustomers.setAdapter(customerAdapter);
         registerForContextMenu(listCustomers);

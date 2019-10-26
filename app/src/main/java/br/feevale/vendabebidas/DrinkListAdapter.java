@@ -10,11 +10,11 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 public class DrinkListAdapter extends BaseAdapter {
-    StoreDatabase db;
+    StoreDatabaseHelper db;
     Context ctx;
     LayoutInflater inflater;
 
-    public DrinkListAdapter(Context ctx, StoreDatabase db){
+    public DrinkListAdapter(Context ctx, StoreDatabaseHelper db){
         inflater = LayoutInflater.from(ctx);
         this.db = db;
         this.ctx = ctx;

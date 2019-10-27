@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="br.feevale.vendabebidas.StoreMainActivity">
+        <activity android:name=".StoreMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,13 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="br.feevale.vendabebidas.CustomerActivity"
-            android:label="@string/customers">
-        </activity>
+            android:name=".CustomerActivity"
+            android:label="@string/customers"></activity>
         <activity
-            android:name="br.feevale.vendabebidas.DrinkActivity"
-            android:label="@string/drinks">
-        </activity>
+            android:name=".DrinkActivity"
+            android:label="@string/drinks"></activity>
+        <activity
+            android:name=".OrderItemsActivity"
+            android:label="@string/order_items"></activity>
     </application>
 
 </manifest>

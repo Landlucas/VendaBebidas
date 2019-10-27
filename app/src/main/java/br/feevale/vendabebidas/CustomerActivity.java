@@ -112,8 +112,6 @@ public class CustomerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(CustomerActivity.this, StoreMainActivity.class);
-                startActivity(intent);
                 finish();
                 return true;
             default:

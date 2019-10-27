@@ -51,12 +51,11 @@ public class DrinkActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newIsAlcoholic.setAdapter(adapter);
-
         newIsAlcoholic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
-                    newIsAlchoholicNumber = i--;
+                    newIsAlchoholicNumber = i - 1;
                 }
             }
 
@@ -137,8 +136,6 @@ public class DrinkActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(DrinkActivity.this, StoreMainActivity.class);
-                startActivity(intent);
                 finish();
                 return true;
             default:

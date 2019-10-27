@@ -21,7 +21,9 @@
     <string name="start_order">Iniciar Venda</string>
     <string name="edit_order">Editar Venda</string>
     <string name="remove_order">Remover Venda</string>
-    <string name="add_order_item">Adicionar Item de Venda</string>
-    <string name="edit_order_item">Editar Item de Venda</string>
-    <string name="remove_order_item">Remover Item de Venda</string>
+    <string name="order_items">Itens da Venda</string>
+    <string name="order_item_qty">Quantidade</string>
+    <string name="add_order_item">Adicionar Bebida na Venda</string>
+    <string name="edit_order_item">Editar Bebida na Venda</string>
+    <string name="remove_order_item">Remover Bebida na Venda</string>
 </resources>

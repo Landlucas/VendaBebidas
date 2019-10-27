@@ -1,7 +1,5 @@
 package br.feevale.vendabebidas;
 
-import java.util.Date;
-
 public class Order {
     private Long id;
     private Double total;

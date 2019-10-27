@@ -32,12 +32,12 @@ public class StoreMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_main);
+        db = StoreDatabaseHelper.getInstance(this);
 
         listOrders = (ListView) findViewById(R.id.listOrders);
         newOrderCustomer = (Spinner) findViewById(R.id.customer);
         buttonAdd = (Button) findViewById(R.id.buttonAdd);
 
-        db = StoreDatabaseHelper.getInstance(this);
         orderAdapter = new OrderListAdapter(getBaseContext(), db);
         listOrders.setAdapter(orderAdapter);
         registerForContextMenu(listOrders);
@@ -54,8 +54,10 @@ public class StoreMainActivity extends AppCompatActivity {
         lastOrder.setTotal((double) 0);
         Long cId = db.addOrder(lastOrder);
         lastOrder.setId(cId);
-        orderAdapter.notifyDataSetChanged();
         newOrderCustomer.setSelection(0);
+        Intent intent = new Intent(this, OrderItemsActivity.class);
+        intent.putExtra("orderId", lastOrder.getId());
+        startActivity(intent);
     }
 
     @Override
@@ -84,6 +86,13 @@ public class StoreMainActivity extends AppCompatActivity {
                 toast.show();
             }
         }
+        if (item.getItemId() == R.id.edit) {
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            lastOrder = (Order) listOrders.getItemAtPosition(acmi.position);
+            Intent intent = new Intent(this, OrderItemsActivity.class);
+            intent.putExtra("orderId", lastOrder.getId());
+            startActivity(intent);
+        }
         return super.onContextItemSelected(item);
     }
 
@@ -105,5 +114,11 @@ public class StoreMainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        orderAdapter.notifyDataSetChanged();
     }
 }

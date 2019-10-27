@@ -326,6 +326,15 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
         return db.update(DrinkTable.TABLE_NAME, values, DrinkTable._ID + "=?", args);
     }
 
+    public int updateOrder(Order o) {
+        ContentValues values = new ContentValues();
+        values.put(OrderTable.COLUMN_CUSTOMER, o.getCustomer().getId());
+        values.put(OrderTable.COLUMN_TOTAL, o.getTotal());
+        String args[] = {o.getId().toString()};
+
+        return db.update(OrderTable.TABLE_NAME, values, OrderTable._ID + "=?", args);
+    }
+
     public void removeCustomer(Customer c) {
         String args[] = {c.getId().toString()};
         db.delete(CustomerTable.TABLE_NAME, CustomerTable._ID + "=?", args);
@@ -338,8 +347,8 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
 
     public void removeOrder(Order o) {
         String args[] = {o.getId().toString()};
-        db.delete(OrderTable.TABLE_NAME, OrderTable._ID + "=?", args);
         db.delete(OrderItemTable.TABLE_NAME, OrderItemTable.COLUMN_ORDER + "=?", args);
+        db.delete(OrderTable.TABLE_NAME, OrderTable._ID + "=?", args);
     }
 
     @Override

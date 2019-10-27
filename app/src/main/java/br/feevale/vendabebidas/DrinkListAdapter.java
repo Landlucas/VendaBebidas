@@ -14,7 +14,7 @@ public class DrinkListAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater inflater;
 
-    public DrinkListAdapter(Context ctx, StoreDatabaseHelper db){
+    public DrinkListAdapter(Context ctx, StoreDatabaseHelper db) {
         inflater = LayoutInflater.from(ctx);
         this.db = db;
         this.ctx = ctx;
@@ -46,9 +46,9 @@ public class DrinkListAdapter extends BaseAdapter {
         Drink d = db.getDrinks().get(i);
         name.setText(d.getName());
         volume.setText(d.getVolume().toString() + " ml");
-        if(d.getAlcoholic() == 1) {
+        if (d.getAlcoholic() == 1) {
             isAlcoholic.setText(ctx.getResources().getString(R.string.alcoholic_drink));
-        } else if(d.getAlcoholic() == 0) {
+        } else if (d.getAlcoholic() == 0) {
             isAlcoholic.setText(ctx.getResources().getString(R.string.not_alcoholic_drink));
         }
         DecimalFormat formater = new DecimalFormat("#.00");

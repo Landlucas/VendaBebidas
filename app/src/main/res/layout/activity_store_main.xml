@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorActivityBackground"
     tools:context="br.feevale.vendabebidas.StoreMainActivity">
 
     <ListView
@@ -12,12 +13,13 @@
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:background="@color/colorListViewBackground"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="6dp"
+        android:divider="@color/colorListViewDivider"
         android:paddingLeft="8dp"
         android:paddingTop="8dp"
         android:paddingRight="8dp"
         android:paddingBottom="8dp"
+        android:dividerHeight="1dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/customer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp" >
 
     <TextView
         android:id="@+id/customer"
@@ -14,6 +16,8 @@
         android:layout_marginEnd="8dp"
         android:text="TextView"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textSize="18sp"
+        app:layout_constraintWidth_percent="0.6"
         app:layout_constraintEnd_toStartOf="@+id/total"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +31,8 @@
         android:text="TextView"
         android:textAlignment="textEnd"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textSize="18sp"
+        app:layout_constraintWidth_percent="0.3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/customer"
         app:layout_constraintTop_toTopOf="@+id/customer" />

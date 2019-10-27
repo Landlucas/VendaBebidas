@@ -1,9 +1,11 @@
 package br.feevale.vendabebidas;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,9 +17,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StoreMainActivity extends AppCompatActivity {
 
@@ -34,13 +33,14 @@ public class StoreMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_main);
 
-        listOrders          = (ListView) findViewById(R.id.listOrders);
-        newOrderCustomer    = (Spinner) findViewById(R.id.customer);
-        buttonAdd           = (Button) findViewById(R.id.buttonAdd);
+        listOrders = (ListView) findViewById(R.id.listOrders);
+        newOrderCustomer = (Spinner) findViewById(R.id.customer);
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
 
-        db = new StoreDatabaseHelper(this);
+        db = StoreDatabaseHelper.getInstance(this);
         orderAdapter = new OrderListAdapter(getBaseContext(), db);
         listOrders.setAdapter(orderAdapter);
+        registerForContextMenu(listOrders);
 
         ArrayAdapter<Customer> customerAdapter = new ArrayAdapter<Customer>(this, android.R.layout.simple_spinner_item, db.getCustomers());
         customerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -50,12 +50,41 @@ public class StoreMainActivity extends AppCompatActivity {
     public void buttonAddClick(View v) {
         lastOrder = new Order();
         Customer c = (Customer) newOrderCustomer.getSelectedItem();
-        lastOrder.setCustomer( c );
-        lastOrder.setTotal(new Double(1));
+        lastOrder.setCustomer(c);
+        lastOrder.setTotal((double) 0);
         Long cId = db.addOrder(lastOrder);
         lastOrder.setId(cId);
         orderAdapter.notifyDataSetChanged();
         newOrderCustomer.setSelection(0);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu,
+                                    View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_crud, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.remove) {
+            try {
+                AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                lastOrder = (Order) listOrders.getItemAtPosition(acmi.position);
+                db.removeOrder(lastOrder);
+                orderAdapter.notifyDataSetChanged();
+                Toast toast = Toast.makeText(getBaseContext(), "Removida venda para " + lastOrder.getCustomer().getName(), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            } catch (SQLiteConstraintException e) {
+                Toast toast = Toast.makeText(getBaseContext(), "Venda não pode ser removida!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -67,11 +96,11 @@ public class StoreMainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.customers){
+        if (item.getItemId() == R.id.customers) {
             Intent intent = new Intent(this, CustomerActivity.class);
             startActivity(intent);
         }
-        if(item.getItemId() == R.id.drinks){
+        if (item.getItemId() == R.id.drinks) {
             Intent intent = new Intent(this, DrinkActivity.class);
             startActivity(intent);
         }

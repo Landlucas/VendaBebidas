@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class CustomerActivity extends AppCompatActivity {
     StoreDatabaseHelper db;
     Customer lastCustomer;
@@ -30,20 +32,20 @@ public class CustomerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listCustomers   = (ListView) findViewById(R.id.listCustomers);
-        newName         = (EditText) findViewById(R.id.name);
-        newEmail        = (EditText) findViewById(R.id.email);
-        newAddress      = (EditText) findViewById(R.id.address);
-        buttonAdd       = (Button) findViewById(R.id.buttonAdd);
+        listCustomers = (ListView) findViewById(R.id.listCustomers);
+        newName = (EditText) findViewById(R.id.name);
+        newEmail = (EditText) findViewById(R.id.email);
+        newAddress = (EditText) findViewById(R.id.address);
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
 
-        db = new StoreDatabaseHelper(this);
+        db = StoreDatabaseHelper.getInstance(this);
         customerAdapter = new CustomerListAdapter(getBaseContext(), db);
         listCustomers.setAdapter(customerAdapter);
         registerForContextMenu(listCustomers);
     }
 
-    public void buttonAddClick(View v){
-        if(isAdd) {
+    public void buttonAddClick(View v) {
+        if (isAdd) {
             lastCustomer = new Customer();
             lastCustomer.setName(newName.getText().toString());
             lastCustomer.setEmail(newEmail.getText().toString());
@@ -75,21 +77,24 @@ public class CustomerActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
         if (item.getItemId() == R.id.remove) {
+            Toast toast;
             try {
                 AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 lastCustomer = (Customer) listCustomers.getItemAtPosition(acmi.position);
-                db.removeCustomer(lastCustomer);
-                customerAdapter.notifyDataSetChanged();
-                Toast toast = Toast.makeText(getBaseContext(), "Removido " + lastCustomer.getName(), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            } catch (SQLiteConstraintException e){
-                Toast toast = Toast.makeText(getBaseContext(), "Cliente não pode ser removido!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+                List<Order> ordersFromCustomer = db.getOrdersFromCustomer(lastCustomer);
+                if (ordersFromCustomer.isEmpty()) {
+                    db.removeCustomer(lastCustomer);
+                    customerAdapter.notifyDataSetChanged();
+                    toast = Toast.makeText(getBaseContext(), "Removido " + lastCustomer.getName(), Toast.LENGTH_LONG);
+                } else {
+                    toast = Toast.makeText(getBaseContext(), "Cliente possui vendas!", Toast.LENGTH_LONG);
+                }
+            } catch (SQLiteConstraintException e) {
+                toast = Toast.makeText(getBaseContext(), "Cliente não pode ser removido!", Toast.LENGTH_LONG);
             }
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
         if (item.getItemId() == R.id.edit) {
             buttonAdd.setText("Editar cliente");
@@ -100,7 +105,6 @@ public class CustomerActivity extends AppCompatActivity {
             newAddress.setText(lastCustomer.getAddress());
             isAdd = false;
         }
-
         return super.onContextItemSelected(item);
     }
 

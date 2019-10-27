@@ -1,5 +1,7 @@
 package br.feevale.vendabebidas;
 
+import android.content.Context;
+
 public class Customer {
     private Long id;
     private String name;

@@ -35,18 +35,19 @@ public class DrinkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_drink);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listDrinks      = (ListView) findViewById(R.id.listDrinks);
-        newName         = (EditText) findViewById(R.id.name);
-        newVolume       = (EditText) findViewById(R.id.volume);
-        newIsAlcoholic  = (Spinner) findViewById(R.id.isAlcoholic);
-        newPrice        = (EditText) findViewById(R.id.price);
-        buttonAdd       = (Button) findViewById(R.id.buttonAdd);
+        listDrinks = (ListView) findViewById(R.id.listDrinks);
+        newName = (EditText) findViewById(R.id.name);
+        newVolume = (EditText) findViewById(R.id.volume);
+        newIsAlcoholic = (Spinner) findViewById(R.id.isAlcoholic);
+        newPrice = (EditText) findViewById(R.id.price);
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
 
-        db = new StoreDatabaseHelper(this);
+        db = StoreDatabaseHelper.getInstance(this);
         drinkAdapter = new DrinkListAdapter(getBaseContext(), db);
         listDrinks.setAdapter(drinkAdapter);
+        registerForContextMenu(listDrinks);
 
-        String spinnerOptions[] = {"É Alcoólico?","Não", "Sim"};
+        String spinnerOptions[] = {"É Alcoólico?", "Não", "Sim"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newIsAlcoholic.setAdapter(adapter);
@@ -54,22 +55,20 @@ public class DrinkActivity extends AppCompatActivity {
         newIsAlcoholic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i > 0) {
+                if (i > 0) {
                     newIsAlchoholicNumber = i--;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Log.d("ITEM","NOT");
+                Log.d("ITEM", "NOT");
             }
         });
-        
-        registerForContextMenu(listDrinks);
     }
 
-    public void buttonAddClick(View v){
-        if(isAdd) {
+    public void buttonAddClick(View v) {
+        if (isAdd) {
             lastDrink = new Drink();
             lastDrink.setName(newName.getText().toString());
             lastDrink.setVolume(Integer.parseInt(newVolume.getText().toString()));
@@ -114,7 +113,7 @@ public class DrinkActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(getBaseContext(), "Removido " + lastDrink.getName(), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
-            } catch (SQLiteConstraintException e){
+            } catch (SQLiteConstraintException e) {
                 Toast toast = Toast.makeText(getBaseContext(), "Bebida não pode ser removida!", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
@@ -126,7 +125,7 @@ public class DrinkActivity extends AppCompatActivity {
             lastDrink = (Drink) listDrinks.getItemAtPosition(acmi.position);
             newName.setText(lastDrink.getName());
             newVolume.setText(lastDrink.getVolume().toString());
-            newIsAlcoholic.setSelection(lastDrink.getAlcoholic()+1);
+            newIsAlcoholic.setSelection(lastDrink.getAlcoholic() + 1);
             newPrice.setText(lastDrink.getPrice().toString());
             isAdd = false;
         }

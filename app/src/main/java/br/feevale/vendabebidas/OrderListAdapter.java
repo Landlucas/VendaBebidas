@@ -43,7 +43,7 @@ public class OrderListAdapter extends BaseAdapter {
 
         Order o = db.getOrders().get(i);
         customer.setText(o.getCustomer().getName());
-        DecimalFormat formater = new DecimalFormat("#.00");
+        DecimalFormat formater = new DecimalFormat("0.00");
         total.setText(ctx.getResources().getString(R.string.currency_prefix) + " " + formater.format(o.getTotal()));
 
         return v;

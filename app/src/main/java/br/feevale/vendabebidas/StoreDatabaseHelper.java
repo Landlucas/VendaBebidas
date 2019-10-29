@@ -260,8 +260,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             order = new Order();
             order.setId(cursor.getLong(cursor.getColumnIndex(OrderTable._ID)));
-            Long customerId = Long.parseLong(cursor.getString(cursor.getColumnIndex(OrderTable.COLUMN_CUSTOMER)));
-            order.setCustomer(getCustomer(customerId));
+            order.setCustomer(customer);
             order.setTotal(cursor.getDouble(cursor.getColumnIndex(OrderTable.COLUMN_TOTAL)));
             orders.add(order);
         }
@@ -278,7 +277,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             item = new OrderItem();
             item.setId(cursor.getLong(cursor.getColumnIndex(OrderItemTable._ID)));
-            item.setOrder(getOrder(cursor.getLong(cursor.getColumnIndex(OrderItemTable.COLUMN_ORDER))));
+            item.setOrder(order);
             item.setDrink(getDrink(cursor.getLong(cursor.getColumnIndex(OrderItemTable.COLUMN_DRINK))));
             item.setQty(cursor.getInt(cursor.getColumnIndex(OrderItemTable.COLUMN_QTY)));
             items.add(item);
@@ -297,7 +296,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
             item = new OrderItem();
             item.setId(cursor.getLong(cursor.getColumnIndex(OrderItemTable._ID)));
             item.setOrder(getOrder(cursor.getLong(cursor.getColumnIndex(OrderItemTable.COLUMN_ORDER))));
-            item.setDrink(getDrink(cursor.getLong(cursor.getColumnIndex(OrderItemTable.COLUMN_DRINK))));
+            item.setDrink(drink);
             item.setQty(cursor.getInt(cursor.getColumnIndex(OrderItemTable.COLUMN_QTY)));
             items.add(item);
         }

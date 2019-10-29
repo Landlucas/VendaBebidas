@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class DrinkActivity extends AppCompatActivity {
     StoreDatabaseHelper db;
     Drink lastDrink;
@@ -104,19 +106,23 @@ public class DrinkActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.remove) {
+            Toast toast;
             try {
                 AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 lastDrink = (Drink) listDrinks.getItemAtPosition(acmi.position);
-                db.removeDrink(lastDrink);
-                drinkAdapter.notifyDataSetChanged();
-                Toast toast = Toast.makeText(getBaseContext(), "Removido " + lastDrink.getName(), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+                List<OrderItem> ordersWithDrink = db.getOrderItemsFromDrink(lastDrink);
+                if (ordersWithDrink.isEmpty()) {
+                    db.removeDrink(lastDrink);
+                    drinkAdapter.notifyDataSetChanged();
+                    toast = Toast.makeText(getBaseContext(), "Removido " + lastDrink.getName(), Toast.LENGTH_LONG);
+                } else {
+                    toast = Toast.makeText(getBaseContext(), "Bebida faz parte de vendas!", Toast.LENGTH_LONG);
+                }
             } catch (SQLiteConstraintException e) {
-                Toast toast = Toast.makeText(getBaseContext(), "Bebida não pode ser removida!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+                toast = Toast.makeText(getBaseContext(), "Não foi possível remover bebida!", Toast.LENGTH_LONG);
             }
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
         if (item.getItemId() == R.id.edit) {
             buttonAdd.setText(getResources().getString(R.string.edit_drink));
